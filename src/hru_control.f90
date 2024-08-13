@@ -75,7 +75,8 @@
       real :: sw_volume_begin
       real :: soil_prof_labp
       real :: sum_conc,sum_mass,sum_sorb !rtb salt
-      
+      real :: saltcon,qsurf,sedppm !Jeong 2024
+     
       j = ihru
       
       !rtb - calculate soil water at the beginning of the day
@@ -148,6 +149,17 @@
         ht1 = hz
         ht2 = hz
 
+        !! check irrigation demand decision table for water allocation
+        if (hru(j)%irr_dmd_dtbl > 0) then
+          id = hru(j)%irr_dmd_dtbl
+          jj = j
+          d_tbl => dtbl_lum(id)
+          !! iauto points to pcom(j)%dtbl(iauto) for days between operation
+          iauto = hru(j)%irr_dmd_iauto
+          call conditions (jj, iauto)
+          call actions (jj, iob, iauto)
+        end if
+        
         !! check auto operations
         if (sched(isched)%num_autos > 0) then
           do iauto = 1, sched(isched)%num_autos
@@ -300,7 +312,7 @@
         if (ires > 0) then
           call wetland_control
         else
-          ht2%flo = wet(j)%flo * hru(j)%area_ha * 10.
+          ht2%flo = ht2%flo + wet(j)%flo 
           wet(j)%flo = 0.
         end if
  
@@ -372,17 +384,6 @@
 
         !! compute plant community partitions
         call pl_community
-
-        !! check irrigation demand decision table for water allocation (after adding irrigation)
-        if (hru(j)%irr_dmd_dtbl > 0) then
-          id = hru(j)%irr_dmd_dtbl
-          jj = j
-          d_tbl => dtbl_lum(id)
-          !! iauto points to pcom(j)%dtbl(iauto) for days between operation
-          iauto = hru(j)%irr_dmd_iauto
-          call conditions (jj, iauto)
-          call actions (jj, iob, iauto)
-        end if
 
         soil_prof_labp = 0.
         do ly = 1, soil(j)%nly
@@ -516,6 +517,27 @@
         !! compute nitrate movement leaching
         call nut_nlch
 
+        if(wet(j)%flo>0.001) then
+          saltcon = wet(j)%salt/wet(j)%flo*1000 !mg/l
+        else
+          saltcon = 0
+        endif
+        
+        if (ires > 0) then
+
+          if (wet(j)%flo>0) then
+            sedppm=wet(j)%sed/wet(j)%flo*1000000.
+          else
+            sedppm=0.
+          endif
+          
+          if (wet_dat_c(ires)%hyd.eq.'paddy') then !.and.time%yrs > pco%nyskip) then
+           write(100100,'(4(I6,","),20(f20.1,","))') time%yrc,time%mo,time%day_mo,j,w%precip,irrig(j)%applied,hru(j)%water_seep,&
+            pet_day,etday,wet_ob(j)%weir_hgt*1000,wet_ob(j)%depth*1000.,ht2%flo/(hru(j)%area_ha*10.),soil(j)%sw,sedppm,ht2%sed*1000,&
+            wet(j)%no3,ht2%no3,pcom(j)%lai_sum,saltcon 
+          endif
+        endif
+
         !! compute phosphorus movement
         call nut_solp
 
@@ -580,6 +602,7 @@
         !! ht2%flo is outflow from wetland or total saturation excess if no wetland
         if(ht2%flo > 0.) then
           wet_outflow = ht2%flo / hru(j)%area_ha / 10.   !! mm = m3/ha *ha/10000m2 *1000mm/m
+          qday = qday + wet_outflow
           qdr(j) = qdr(j) + wet_outflow
           ht2%flo = 0.
         end if
@@ -614,7 +637,7 @@
       if (ob(iob)%ru_tot > 0) then
         iob_out = sp_ob1%ru + ob(iob)%ru(1) - 1
       end if
-      
+      qsurf=surfq(j)
       hwb_d(j)%surq_cha = 0.
       hwb_d(j)%latq_cha = 0.
       hwb_d(j)%surq_res = 0.

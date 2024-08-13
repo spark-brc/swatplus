@@ -1,0 +1,3 @@
+wetland.wet: written by SWAT+ editor v2.3.0 on 2023-10-17 20:05 for SWAT+ rev.60.5.7
+    NUMB      NAME                 INIT        	HYD     	    REL     	      SED      	        NUT          WEIR  
+       1  paddy001            high_init        paddy           weir           sedwet1           nutwet1          weir1  

@@ -1,0 +1,8 @@
+ Comunidad_de_riego_Turia_ SWAT+ @TODAY@        MODULAR Rev @YEAR@.@SWAT_VERSION@                         
+       year     plant_no   plant_name       harv_area(ha)    yld(t)         yld(t/ha)      
+        2016           1 rice140            10.00000       43.35577       4.335576    
+        2017           1 rice140            10.00000       42.92881       4.292881    
+        2018           1 rice140            10.00000       44.78971       4.478971    
+        2019           1 rice140            10.00000       39.57045       3.957045    
+        2020           1 rice140            10.00000       40.74774       4.074773    
+        2021           1 rice140            10.00000       40.41330       4.041329    

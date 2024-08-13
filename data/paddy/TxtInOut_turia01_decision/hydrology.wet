@@ -1,0 +1,3 @@
+hydrology.wet: written by SWAT+ editor v2.3.0 on 2023-10-17 20:05 for SWAT+ rev.60.5.7
+name              area_ps        vol_ps       area_es        vol_es             k       evap_co         acoef         bcoef         ccoef          frac 
+paddy                1.00        180.00          1.00        180.00           0.1          0.8          1.00          1.00          1.00          0.50

@@ -1,0 +1,8 @@
+ Comunidad_de_riego_Turia_ SWAT+ @TODAY@        MODULAR Rev @YEAR@.@SWAT_VERSION@                         
+        jday        mon        day         yr            unit              gis_id     name                plant_c    res_decay_c    harv_stov_c         emit_c
+                                                                                                          kg C/ha        kg C/ha        kg C/ha        kg C/ha
+         365          12          31        2017           1                     1 hru001             9908.090      0.0000000E+00  0.0000000E+00  0.0000000E+00
+         365          12          31        2018           1                     1 hru001             44659.25      0.0000000E+00  0.0000000E+00  0.0000000E+00
+         365          12          31        2019           1                     1 hru001             104077.6      0.0000000E+00  0.0000000E+00  0.0000000E+00
+         366          12          31        2020           1                     1 hru001             186448.6      0.0000000E+00  0.0000000E+00  0.0000000E+00
+         365          12          31        2021           1                     1 hru001             291958.1      0.0000000E+00  0.0000000E+00  0.0000000E+00

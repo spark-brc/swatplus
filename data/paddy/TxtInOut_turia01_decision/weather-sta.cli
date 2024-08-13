@@ -1,0 +1,3 @@
+weather-sta.cli: written by SWAT+ editor v2.3.0 on 2023-10-17 20:05 for SWAT+ rev.60.5.7
+name                           wgn                        pcp                        tmp                        slr                        hmd                        wnd           wnd_dir          atmo_dep  
+s39280n462w               benifaio           benifaio_PCP.pcp           benifaio_TMP.tmp           benifaio_SLR.slr           benifaio_HMD.hmd           benifaio_WND.wnd              null              null  

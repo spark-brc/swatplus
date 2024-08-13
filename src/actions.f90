@@ -168,7 +168,7 @@
 
             if (d_tbl%act(iac)%name=='ponding') then !paddy irrigation
               hru(j)%irr_hmax = d_tbl%act(iac)%const !mm
-              hru(j)%irr_hmin = d_tbl%act(iac)%const2 !mm
+              hru(j)%irr_hmin = d_tbl%act(iac)%const * 0.7 !mm 
               irrig(j)%applied = max(0.,d_tbl%act(iac)%const-wet_ob(j)%depth*1000.) * irrop_db(irrop)%eff * &
                         (1. - irrop_db(irrop)%surq) !mm
               irrig(j)%runoff = max(0.,d_tbl%act(iac)%const-wet_ob(j)%depth*1000.) * irrop_db(irrop)%surq   !mm
@@ -181,6 +181,18 @@
 
             !select object type
             iob = d_tbl%act(iac)%ob_num
+      !      iob = sp_ob%hru + ob(j)%ru(1) !Routng Unit ID the current HRU belongs to.
+      !      if (isrc == 0) then
+      !        do i = 1, ob(iob)%src_tot
+      !          if (d_tbl%act(iac)%ob == ob(iob)%obtyp_out(i)) then !
+      !            iob = ob(iob)%obtypno_out(i) ! Irrigation source is the current cha/res/aqu that the HRU is linked to in the rout_unit.con if it exists.
+      !            exit
+      !          else
+      !            d_tbl%act(iac)%ob = "unlimited"
+      !          endif
+      !        end do
+      !    
+      !      endif
             select case (d_tbl%act(iac)%ob)
             case ("aqu")
               stor_m3 = aqu_d(iob)%stor * aqu_prm(iob)%area_ha * 10.

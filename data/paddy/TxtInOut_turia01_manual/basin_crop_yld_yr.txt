@@ -1,0 +1,8 @@
+ Comunidad_de_riego_Turia_ SWAT+ Apr 12 2023       MODULAR Rev 2023.60.5.6                                
+       year     plant_no   plant_name       harv_area(ha)    yld(t)         yld(t/ha)      
+        2016           1 rice               20.00000       15.13843      0.7569214    
+        2017           1 rice               20.00000       10.81436      0.5407180    
+        2018           1 rice               20.00000       11.88672      0.5943359    
+        2019           1 rice               20.00000       15.58369      0.7791845    
+        2020           1 rice               20.00000       14.40219      0.7201092    
+        2021           1 rice               20.00000       19.39679      0.9698396    

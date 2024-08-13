@@ -1,0 +1,10 @@
+ Comunidad_de_riego_Turia_
+  SWAT+ @TODAY@        MODULAR Rev @YEAR@.@SWAT_VERSION@                        
+  
+                                                                            --YIELD (kg/ha)--
+  jday   mon   day    yr    unit PLANTNM                         MASS          C           N           P
+   365    12    31  2017       1    rice140                     0.000       0.000       0.000       0.000
+   365    12    31  2018       1    rice140                     0.000       0.000       0.000       0.000
+   365    12    31  2019       1    rice140                     0.000       0.000       0.000       0.000
+   366    12    31  2020       1    rice140                     0.000       0.000       0.000       0.000
+   365    12    31  2021       1    rice140                     0.000       0.000       0.000       0.000

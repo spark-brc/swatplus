@@ -1,0 +1,8 @@
+ Comunidad_de_riego_Turia_ SWAT+ Apr 12 2023       MODULAR Rev 2023.60.5.6                                
+  jday   mon   day    yr    unit  gis_id     name         lab_min_p        act_sta_p        act_nit_n        act_sta_n        org_lab_p         rsd_hs_c    rsd_nitrorg_n     rsd_laborg_p
+                                                               kgha             kgha             kgha             kgha             kgha             kgha             kgha             kgha
+   365    12    31  2017       1       1  hru001              0.000            0.000            0.000            0.000            0.000            0.000            0.000            0.000
+   365    12    31  2018       1       1  hru001              0.000            0.000            0.000            0.000            0.000            0.000            0.000            0.000
+   365    12    31  2019       1       1  hru001              0.000            0.000            0.000            0.000            0.000            0.000            0.000            0.000
+   366    12    31  2020       1       1  hru001              0.000            0.000            0.000            0.000            0.000            0.000            0.000            0.000
+   365    12    31  2021       1       1  hru001              0.000            0.000            0.000            0.000            0.000            0.000            0.000            0.000

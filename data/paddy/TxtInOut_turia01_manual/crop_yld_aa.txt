@@ -1,0 +1,6 @@
+ Comunidad_de_riego_Turia_
+  SWAT+ Apr 12 2023       MODULAR Rev 2023.60.5.6                               
+  
+                                                                            --YIELD (kg/ha)--
+  jday   mon   day    yr    unit PLANTNM                         MASS          C           N           P
+   365    12    31  2021       1    rice140                                           726.852     331.527       9.065       1.453

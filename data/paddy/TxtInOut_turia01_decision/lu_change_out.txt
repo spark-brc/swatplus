@@ -1,0 +1,2 @@
+ Comunidad_de_riego_Turia_ SWAT+ @TODAY@        MODULAR Rev @YEAR@.@SWAT_VERSION@                         
+          hru       year         mon         day     operation   lu_before         lu_after

@@ -1,0 +1,4 @@
+ Comunidad_de_riego_Turia_ SWAT+ @TODAY@        MODULAR Rev @YEAR@.@SWAT_VERSION@                         
+ BSN_TOTC                basin_totc.txt
+        jday          yr        unit    soil_tot_c   plant_tot_c     rsd_tot_c 
+          --          --          --          kg/ha         kg/ha         kg/ha
