@@ -1,5 +1,4 @@
       subroutine actions (ob_cur, ob_num, idtbl)
-      use conditional_module
       use climate_module
       use time_module
       use aquifer_module
