@@ -7,7 +7,7 @@
       
       implicit none
  
-      integer :: j = 0               !none       |counter 
+      integer :: j                   !none       |counter 
       
       !!assign topography and hyd parameters
       do j = 1, sp_ob%hru

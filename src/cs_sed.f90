@@ -9,13 +9,8 @@
       use soil_module
 
       implicit none
-      integer :: j = 0
-      real :: xx = 0.
-      real :: xxseo4 = 0.
-      real :: xxseo3 = 0.
-      real :: wt1 = 0.
-      real :: conc = 0.
-      real :: sedse = 0.
+      integer :: j
+      real :: xx,xxseo4,xxseo3,wt1,conc,sedse
 
       !hru number
       j = ihru

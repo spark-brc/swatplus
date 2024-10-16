@@ -6,9 +6,7 @@
        
        implicit none
        
-       integer :: icon = 0
-       integer :: modu = 0
-       integer :: iscon = 0
+       integer ::  icon, modu, iscon
        integer, intent(in) :: ictbl
        real, intent(in) :: stor
        real, intent(in) :: inflo

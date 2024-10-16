@@ -10,12 +10,10 @@
 
       implicit none
       
-      character (len=80) :: titldum = ""
-      character (len=80) :: header = ""
-      integer :: eof = 0
-      integer :: imax = 0
+      character (len=80) :: titldum, header
+      integer :: eof, imax
       logical :: i_exist              !none       |check to determine if file exists
-      integer :: ii = 0
+      integer :: ii
 
       eof = 0
       imax = 0

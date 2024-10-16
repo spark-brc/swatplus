@@ -11,31 +11,29 @@
       
       implicit none      
  
-      character (len=80) :: titldum = ""!           |title of file
-      character (len=80) :: header = "" !           |header of file
-      character(len=16) :: ob_name = ""
-      character(len=8) :: ob_typ = ""
-      integer :: imax = 0             !none       |end of loop
-      integer :: iyr = 0              !           |
-      integer :: jday = 0             !           |
-      integer :: mo = 0               !           |
-      integer :: day_mo = 0           !           |
-      integer :: eof = 0              !           |end of file
+      character (len=80) :: titldum   !           |title of file
+      character (len=80) :: header    !           |header of file
+      character(len=16) :: ob_name
+      character(len=8) :: ob_typ
+      integer :: imax                 !none       |end of loop
+      integer :: iyr                  !           |
+      integer :: jday                 !           |
+      integer :: mo                   !           |
+      integer :: day_mo               !           |
+      integer :: eof                  !           |end of file
       logical :: i_exist              !none       |check to determine if file exists
-      integer :: nbyr = 0             !none       !number of years the land use occurred 
-      integer :: k = 0                !           |
-      integer :: iyrs = 0             !           | 
-      integer :: iyr_prev = 0         !none       |previous year
-      integer :: istep = 0            !           | 
-      integer :: ipc = 0              !none       |counter
-      integer :: ii = 0               !none       |counter
-      integer :: i = 0                !           |
-      integer :: iexco_om = 0
-      integer :: ifirst = 0           !           |
+      integer :: nbyr                 !none       !number of years the land use occurred 
+      integer :: k                    !           |
+      integer :: iyrs                 !           | 
+      integer :: iyr_prev             !none       |previous year
+      integer :: istep                !           | 
+      integer :: ipc                  !none       |counter
+      integer :: ii                   !none       |counter
+      integer :: i                    !           |
+      integer :: iexco_om
+      integer :: ifirst               !           |
       integer :: iexo_allo = 0
-      integer :: ics = 0
-      integer :: jj = 0
-      integer :: kk = 0
+      integer :: ics,jj,kk
       
       eof = 0
       imax = 0
@@ -68,10 +66,10 @@
         allocate (reccsb_y(imax))
         allocate (reccsb_a(imax))
         do ii=1,imax
-          allocate (reccsb_d(ii)%cs(cs_db%num_cs), source = 0.)
-          allocate (reccsb_m(ii)%cs(cs_db%num_cs), source = 0.)
-          allocate (reccsb_y(ii)%cs(cs_db%num_cs), source = 0.)
-          allocate (reccsb_a(ii)%cs(cs_db%num_cs), source = 0.)
+          allocate (reccsb_d(ii)%cs(cs_db%num_cs))
+          allocate (reccsb_m(ii)%cs(cs_db%num_cs))
+          allocate (reccsb_y(ii)%cs(cs_db%num_cs))
+          allocate (reccsb_a(ii)%cs(cs_db%num_cs))
           do ics=1,cs_db%num_cs
             reccsb_d(ii)%cs(ics) = 0.
             reccsb_m(ii)%cs(ics) = 0.
@@ -85,10 +83,10 @@
         allocate (recoutcsb_y(imax))
         allocate (recoutcsb_a(imax))
         do ii=1,imax
-          allocate (recoutcsb_d(ii)%cs(cs_db%num_cs), source = 0.)
-          allocate (recoutcsb_m(ii)%cs(cs_db%num_cs), source = 0.)
-          allocate (recoutcsb_y(ii)%cs(cs_db%num_cs), source = 0.)
-          allocate (recoutcsb_a(ii)%cs(cs_db%num_cs), source = 0.)
+          allocate (recoutcsb_d(ii)%cs(cs_db%num_cs))
+          allocate (recoutcsb_m(ii)%cs(cs_db%num_cs))
+          allocate (recoutcsb_y(ii)%cs(cs_db%num_cs))
+          allocate (recoutcsb_a(ii)%cs(cs_db%num_cs))
           do ics=1,cs_db%num_cs
             recoutcsb_d(ii)%cs(ics) = 0.
             recoutcsb_m(ii)%cs(ics) = 0.
@@ -134,7 +132,7 @@
                 allocate (rec_cs(i)%hd_cs(366,nbyr))
                 do jj=1,nbyr
                   do kk=1,366  
-                    allocate (rec_cs(i)%hd_cs(kk,jj)%cs(cs_db%num_cs), source = 0.)
+                    allocate (rec_cs(i)%hd_cs(kk,jj)%cs(cs_db%num_cs))
                     rec_cs(i)%hd_cs(kk,jj)%cs = 0.
                   enddo
                 enddo
@@ -142,14 +140,14 @@
                 allocate (rec_cs(i)%hd_cs(12,nbyr))
                 do jj=1,nbyr
                   do kk=1,12  
-                    allocate (rec_cs(i)%hd_cs(kk,jj)%cs(cs_db%num_cs), source = 0.)
+                    allocate (rec_cs(i)%hd_cs(kk,jj)%cs(cs_db%num_cs))
                     rec_cs(i)%hd_cs(kk,jj)%cs = 0.
                   enddo
                 enddo
               case (3) !! annual
                 allocate (rec_cs(i)%hd_cs(1,nbyr))
                 do jj=1,nbyr
-                  allocate (rec_cs(i)%hd_cs(1,jj)%cs(cs_db%num_cs), source = 0.)
+                  allocate (rec_cs(i)%hd_cs(1,jj)%cs(cs_db%num_cs))
                   rec_cs(i)%hd_cs(1,jj)%cs = 0.
                 enddo
             end select 

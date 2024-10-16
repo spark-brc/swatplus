@@ -7,7 +7,7 @@
       
       implicit none
 
-      real :: const = 0.
+      real :: const
                   
       bch_sed_bud_d = ch_sed_budz
 

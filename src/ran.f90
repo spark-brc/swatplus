@@ -9,10 +9,9 @@
       integer(k4b), parameter :: im=2147483647
       integer(k4b), parameter :: iq=127773
       integer(k4b), parameter :: ir=2836
-      real, save :: am = 0.
+      real, save :: am
       integer(k4b), save :: ix=1
-      integer(k4b), save :: iy=-1
-      integer(k4b), save :: k = 0
+      integer(k4b), save :: iy=-1,k
       
       if (idum <= 0 .or. iy < 0) then
           am=nearest(1.0,-1.0) / im

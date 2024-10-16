@@ -10,13 +10,12 @@
 
       implicit none
  
-      character (len=80) :: titldum = ""
-      character (len=80) :: header = ""
-      integer :: ipathi = 0
-      integer :: eof = 0
-      integer :: imax = 0
+      character (len=80) :: titldum
+      character (len=80) :: header
+      integer :: ipathi
+      integer :: eof, imax
       logical :: i_exist              !none       |check to determine if file exists
-      integer :: ipath = 0
+      integer :: ipath
 
       eof = 0
       
@@ -48,8 +47,8 @@
           allocate (path_init_name(imax))
 
           do ipathi = 1, imax
-            allocate (path_water_ini(ipathi)%water(cs_db%num_paths), source = 0.)
-            allocate (path_water_ini(ipathi)%benthic(cs_db%num_paths), source = 0.)
+            allocate (path_water_ini(ipathi)%water(cs_db%num_paths))
+            allocate (path_water_ini(ipathi)%benthic(cs_db%num_paths))
           end do
           rewind (107)
           read (107,*,iostat=eof) titldum

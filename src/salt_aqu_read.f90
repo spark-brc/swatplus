@@ -7,11 +7,10 @@
       
       implicit none
  
-      character (len=80) :: titldum = ""
-      character (len=80) :: header = ""
-      integer :: isalt = 0
-      integer :: eof = 0
-      integer :: imax = 0
+      character (len=80) :: titldum
+      character (len=80) :: header
+      integer :: isalt
+      integer :: eof, imax
       logical :: i_exist              !none       |check to determine if file exists
 
       eof = 0
@@ -41,12 +40,12 @@
           db_mx%salt_gw_ini = imax
           
           !allocate array
-          allocate (salt_aqu_ini(imax))
+          allocate(salt_aqu_ini(imax))
           
           !loop through, reading in groundwater data (concentrations, sorbed)
           do isalt=1,imax
-            allocate (salt_aqu_ini(isalt)%conc(cs_db%num_salts), source = 0.)
-            allocate (salt_aqu_ini(isalt)%frac(5), source = 0.)
+            allocate(salt_aqu_ini(isalt)%conc(cs_db%num_salts))
+            allocate(salt_aqu_ini(isalt)%frac(5))
           end do
            
           rewind (107)

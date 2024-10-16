@@ -5,8 +5,8 @@
       
       implicit none
       
-      integer :: j = 0 !none      |counter
-      real :: nevents = 0.
+      integer :: j   !none      |counter
+      real :: nevents
 
       do j = 1, sp_ob%hru
         !! divide by number of events to get event average

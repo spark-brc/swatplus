@@ -15,17 +15,17 @@
       implicit none
       
       integer, intent (in) :: iihru     !none       |
-      integer :: iprop = 0              !           |  
-      integer :: init_om = 0
-      integer :: ihyd = 0               !none       |counter 
-      integer :: init = 0               !           |
-      integer :: iweir = 0              !           |
-      integer :: icon = 0               !           |
-      integer :: isalt = 0              !           |salt ion counter
-      real :: x1 = 0.                   !           |
-      real :: wet_h = 0.                !           |
-      real :: wet_h1 = 0.               !           | 
-      real :: wet_fr = 0.               !           |
+      integer :: iprop                  !           |  
+      integer :: init_om
+      integer :: ihyd                   !none       |counter 
+      integer :: init                   !           |
+      integer :: iweir                  !              |
+      integer :: icon                   !           |
+      integer :: isalt									!						|salt ion counter
+      real :: x1                        !           |
+      real :: wet_h                     !           |
+      real :: wet_h1                    !           | 
+      real :: wet_fr                    !           |
   
         iprop = hru(iihru)%dbs%surf_stor
         iweir = wet_ob(iihru)%iweir
@@ -38,10 +38,10 @@
           !  hru(iihru)%wet_hc = soil(iihru)%phys(1)%k
           !endif
           !! ha*mm*10. => m**3  - assume entire hru is wet and don't use fractional inputs (for simplicity)
-          wet_ob(iihru)%evol = hru(iihru)%area_ha * wet_hyd(iihru)%edep * 10.  ! * wet_hyd(ihyd)%esa
-          wet_ob(iihru)%pvol = hru(iihru)%area_ha * wet_hyd(iihru)%pdep * 10.  ! * wet_hyd(ihyd)%psa
-          wet_ob(iihru)%psa = wet_hyd(iihru)%psa * hru(iihru)%area_ha 
-          wet_ob(iihru)%esa = wet_hyd(iihru)%esa * hru(iihru)%area_ha 
+          wet_ob(iihru)%evol = hru(iihru)%area_ha * wet_hyd(ihyd)%edep * 10.  ! * wet_hyd(ihyd)%esa
+          wet_ob(iihru)%pvol = hru(iihru)%area_ha * wet_hyd(ihyd)%pdep * 10.  ! * wet_hyd(ihyd)%psa
+          wet_ob(iihru)%psa = wet_hyd(ihyd)%psa * hru(iihru)%area_ha 
+          wet_ob(iihru)%esa = wet_hyd(ihyd)%esa * hru(iihru)%area_ha 
           !! set initial weir height to principal depth - m
           if (db_mx%res_weir > 0.and.wet_ob(iihru)%iweir>0) then !if available, read from weir.res Jaehak 2022
             wet_ob(iihru)%weir_hgt = res_weir(iweir)%h  !m weir height
@@ -52,7 +52,7 @@
               wet_ob(iihru)%evol = wet_ob(iihru)%pvol * 1.2   
             endif
           else
-            wet_ob(iihru)%weir_hgt = wet_hyd(iihru)%pdep / 1000.  !m
+            wet_ob(iihru)%weir_hgt = wet_hyd(ihyd)%pdep / 1000.  !m
             wet_ob(iihru)%weir_wid = 2.5  !m
           endif
 

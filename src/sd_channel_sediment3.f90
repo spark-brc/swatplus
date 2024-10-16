@@ -10,45 +10,34 @@
     
       implicit none     
     
-      integer :: iob = 0            !               |object number
-      integer :: ihru = 0
-      integer :: iihru = 0
-      integer :: ires = 0
-      real :: rto = 0.
-      real :: rto1 = 0.
-      real :: trap_eff = 0.         !frac           |trap efficiency in the flood plain
-      real :: cohesion = 0.         !               |soil bank cohesion 
-      real :: b_exp = 0.            !               |exponent for bank erosion equation
-      real :: vel_fall = 0.         !m/s            |fall velocity of sediment particles in channel
-      real :: dep_fall = 0.         !m              |fall depth of sediment particles in channel
-      real :: del_rto = 0.          !frac           |fraction of sediment deposited in channel
-      real :: conc_chng = 0.        !               |change in concentration (and mass) in channel sol and org N and P
-      real :: ebtm_m = 0.           !m              |erosion of bottom of channel
-      real :: ebank_m = 0.          !m              |meander cut on one side
-      real :: ebtm_t = 0.           !tons           |bottom erosion
-      real :: ebank_t = 0.          !tons           |bank erosion
-      real :: shear_btm_cr = 0.     !               |
-      real :: shear_btm = 0.        !               |  
-      real :: bf_flow = 0.          !m3/s           |bankfull flow rate * adjustment factor
-      real :: pk_rto = 0.           !ratio          |peak to mean flow rate ratio
-      real :: bd_fac = 0.           !               |bulk density factor for critical velocity calculation
-      real :: cohes_fac = 0.        !               |cohesion factor for critical velocity calculation
-      !real :: qman                  !m^3/s or m/s   |flow rate or flow velocity
-      real :: vel = 0.
-      real :: veg = 0.
-      real :: vel_cr = 0.
-      real :: rad_curv = 0.
-      real :: vel_bend = 0.
-      real :: vel_rch = 0.
-      real :: arc_len = 0.
-      real :: prot_len = 0.
-      real :: h_rad = 0.
-      real :: fp_m2 = 0.
-      real :: exp_co = 0.
-      real :: florate_ob = 0.
-      real :: precip = 0.
-      real :: flovol_ob = 0.
-      real :: wet_fill = 0.
+      integer :: iob                !               |object number
+      integer :: ihru
+      integer :: iihru
+      integer :: ires
+      real :: rto
+      real :: rto1
+      real :: trap_eff              !frac           |trap efficiency in the flood plain
+      real :: cohesion              !               |soil bank cohesion 
+      real :: b_exp                 !               |exponent for bank erosion equation
+      real :: vel_fall              !m/s            |fall velocity of sediment particles in channel
+      real :: dep_fall              !m              |fall depth of sediment particles in channel
+      real :: del_rto               !frac           |fraction of sediment deposited in channel
+      real :: ebtm_m                !m              |erosion of bottom of channel
+      real :: ebank_m               !m              |meander cut on one side
+      real :: ebtm_t                !tons           |bottom erosion
+      real :: ebank_t               !tons           |bank erosion
+      real :: shear_btm_cr          !               |
+      real :: shear_btm             !               |    
+      real :: inflo                 !m^3            |inflow water volume
+      real :: inflo_rate            !m^3/s          |inflow rate
+      real :: flo_time              !s              |estimate of total flow time through the channel
+      real :: bf_flow               !m3/s           |bankfull flow rate * adjustment factor
+      real :: pk_rto                !ratio          |peak to mean flow rate ratio
+      real :: bd_fac                !               |bulk density factor for critical velocity calculation
+      real :: cohes_fac             !               |cohesion factor for critical velocity calculation
+      real :: florate               !m^3/s          |flow rate below the triangle for flow lasting more than a day
+      real :: vel, veg, vel_cr, rad_curv, vel_bend, vel_rch, arc_len, prot_len, h_rad
+      real :: fp_m2, exp_co, florate_ob, precip, flovol_ob, wet_fill
       
       ich = isdch
       iob = sp_ob1%chandeg + jrch - 1
@@ -109,12 +98,21 @@
       !! compute flood plain deposition
       bf_flow = sd_ch(ich)%bankfull_flo * ch_rcurv(ich)%elev(2)%flo_rate
       florate_ob = peakrate - bf_flow
-      flovol_ob = florate_ob * 86400.
-      flovol_ob = Min (flovol_ob, ht1%flo)
-      if (flovol_ob > 0.) then
-        trap_eff = 0.05 * log(sd_ch(ich)%fp_inun_days) + 0.1
+      if (florate_ob > 0.) then
+        flo_time = 2. * ht1%flo / peakrate
+        !! assume a triangular distribution
+        if (flo_time < 86400.) then
+          !! flow is over within the day
+          flovol_ob = ht1%flo * (((peakrate - bf_flow) / peakrate) ** 2)
+        else
+          !! flow continues over the day - florate is the rate under the triangle
+          florate = 2. * ht1%flo - peakrate
+          flovol_ob = ht1%flo * (((peakrate - bf_flow) / (peakrate - florate)) ** 2)
+        end if
+        !trap_eff = 0.05 * log(sd_ch(ich)%fp_inun_days) + 0.1
+        !! trap efficiency from Dynamic SedNet Component Model Reference Guide: Update 2017
         fp_m2 = 3. * sd_ch(ich)%chw * sd_ch(ich)%chl * 1000.
-        exp_co = 0.00001 * fp_m2 / florate_ob
+        exp_co = 0.0007 * fp_m2 / florate_ob
         trap_eff = sd_ch(ich)%fp_inun_days * (florate_ob / peakrate) * (1. - exp(-exp_co))
         trap_eff = Min (1., trap_eff)
         fp_dep%sed = trap_eff * ht1%sed
@@ -144,6 +142,7 @@
             rto = Min (1., rto)
             if (rto > 1.e-6) then
               wet(iihru) = wet(iihru) + rto * ht1
+              wet_in_d(iihru) = wet_in_d(iihru) + rto * ht1
               hru(iihru)%wet_obank_in = (rto * ht1%flo) / (10. * hru(iihru)%area_ha)
               rto1 = 1. - rto
               ob(icmd)%tsin(:) = rto1 * ob(icmd)%tsin(:)

@@ -10,10 +10,10 @@
 	  integer :: k          !none          |counter
       integer :: j          !none          |HRU number
  	  real :: cdg           !none          |soil temperature factor
-      real :: wdn           !kg N/ha       |amount of nitrogen lost from nitrate pool in
+      real ::wdn            !kg N/ha       |amount of nitrogen lost from nitrate pool in
                             !              |layer due to denitrification 
       real :: void          !              |
-      real :: vof = 0.      !              |
+      real :: vof           !              |
 
       wdn = 0.
 	  vof = 1. / (1. + (void/0.04)**5)

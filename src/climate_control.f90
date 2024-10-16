@@ -40,26 +40,26 @@
       
       implicit none
            
-      integer :: ii = 0           !none          |counter       
-      integer :: iyp = 0          !none          |year currently being simulated
-      integer :: idap = 0         !julain date   |day currently being simulated
-      real :: petmeas = 0.        !mm H2O        |potential ET value read in for day 
-      real :: half_hr_mn = 0.     !mm H2O        |lowest value half hour precip fraction can have
-      real :: half_hr_mx = 0.     !mm H2O        |highest value half hour precip fraction can have
-      integer :: iwgn = 0         !              |
-      integer :: ipet = 0         !              |
-      integer :: ig = 0           !              |
-      integer :: yrs_to_start = 0 !              |
-      integer :: cur_day = 0
-      real :: ramm = 0.           !MJ/m2         |extraterrestrial radiation
-      real :: xl = 0.             !MJ/kg         |latent heat of vaporization
+      integer :: ii               !none          |counter       
+      integer :: iyp              !none          |year currently being simulated
+      integer :: idap             !julain date   |day currently being simulated
+      real :: petmeas             !mm H2O        |potential ET value read in for day 
+      real :: half_hr_mn          !mm H2O        |lowest value half hour precip fraction can have
+      real :: half_hr_mx          !mm H2O        |highest value half hour precip fraction can have
+      integer :: iwgn             !              |
+      integer :: ipet             !              |
+      integer :: ig               !              |
+      integer :: yrs_to_start     !              |
+      integer :: cur_day
+      real :: ramm                !MJ/m2         |extraterrestrial radiation
+      real :: xl                  !MJ/kg         |latent heat of vaporization
       real :: atri                !none          |daily value generated for distribution
       integer :: ifirstpet = -1   !none          |potential ET data search code
                                   !              |0 first day of potential ET data located in
                                   !              |file
                                   !              |1 first day of potential ET data not located
                                   !              |in file
-      real :: xx = 0.
+      real :: xx
       character(len=1) :: out_bounds = 'n'
         
       !! Precipitation:
@@ -205,15 +205,15 @@
       if (ppet_mce > ppet_ndays) ppet_mce = 1
       do iwst = 1, db_mx%wst
         !! calculate climatic moisture index - cumulative p/pet
-        !! Use Hargreaves Potential ET Method 
-        ramm = wst(iwst)%weat%solradmx * 37.59 / 30. 
+        !! Use Hargreaves Potential ET Method
+        ramm = wst(iwst)%weat%solradmx * 37.59 / 30.
         if (wst(iwst)%weat%tmax > wst(iwst)%weat%tmin) then
           xl = 2.501 - 2.361e-3 * wst(iwst)%weat%tave
           wst(iwst)%weat%pet = .0023 * (ramm / xl) * (wst(iwst)%weat%tave      &
                 + 17.8) * (wst(iwst)%weat%tmax - wst(iwst)%weat%tmin) ** 0.5
-          wst(iwst)%weat%pet = Max(0., wst(iwst)%weat%pet)
+          wst(iwst)%weat%pet = Max(0.01, wst(iwst)%weat%pet)
         else
-          wst(iwst)%weat%pet = 0.
+          wst(iwst)%weat%pet = 0.01
         endif
         if (wst(iwst)%weat%pet > 0.1) then
           wst(iwst)%weat%ppet = wst(iwst)%weat%ppet + wst(iwst)%weat%precip / wst(iwst)%weat%pet

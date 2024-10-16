@@ -40,43 +40,43 @@
       
       implicit none
 
-      integer :: j = 0              !none          |same as ihru (hru number)
-      integer :: j1 = 0             !none          |counter (rtb)
-      integer :: ulu = 0            !              | 
-      integer :: iob = 0            !              |
-      integer :: ith = 0            !              |
-      integer :: iwgn = 0           !              |
-      integer :: ires = 0           !none          |reservoir number
-      integer :: isched = 0         !              |
-      integer :: isalt = 0          !              |salt ion counter (rtb salt)
-      integer :: ics = 0            !              |constituent counter (rtb cs)
-      integer :: iauto = 0          !none          |counter
-      integer :: id = 0             !              |
-      integer :: jj = 0             !              |
-      integer :: ly = 0             !none          |soil layer
-      integer :: ipest = 0          !none          |sequential pesticide number
-      real :: strsa_av = 0.         !              |
-      integer :: icn = 0            !              |
-      real :: xx = 0.               !              |
-      integer :: iob_out = 0        !              |object type out 
-      integer :: iout = 0           !none          |counter
-      integer :: iac = 0
-      integer :: npl_gro = 0        !              |number of plants currently growing
-      real :: dep = 0.              !              |
-      real :: strsw_av = 0.
-      real :: strsn_av = 0.
-      real :: strsp_av = 0.
-      real :: strss_av = 0.         !none (rtb salt)
-      real :: strstmp_av = 0.
-      real :: wet_outflow = 0.      !mm             |outflow from wetland
-      real  :: tile_fr_surf = 0.    !m3             |fraction of tile flow that is overland
-      integer :: ifrt = 0
-      integer :: idp = 0
-      real :: sw_volume_begin = 0.
-      real :: soil_prof_labp = 0.
-      real :: sum_conc = 0.              !rtb salt
-      real :: sum_mass = 0.              !rtb salt
-      real :: sum_sorb = 0.              !rtb salt
+      integer :: j                  !none          |same as ihru (hru number)
+      integer :: j1                 !none          |counter (rtb)
+      integer :: ulu                !              | 
+      integer :: iob                !              |
+      integer :: ith                !              |
+      integer :: iwgn               !              |
+      integer :: ires               !none          |reservoir number
+      integer :: isched             !              |
+      integer :: isalt              !              |salt ion counter (rtb salt)
+      integer :: ics                !              |constituent counter (rtb cs)
+      integer :: iauto              !none          |counter
+      integer :: id                 !              |
+      integer :: jj                 !              |
+      integer :: ly                 !none          |soil layer
+      integer :: ipest              !none          |sequential pesticide number
+      real :: strsa_av              !              |
+      integer :: icn                !              |
+      real :: xx                    !              |
+      integer :: iob_out            !              |object type out 
+      integer :: iout               !none          |counter
+      integer :: iac
+      integer :: npl_gro            !              |number of plants currently growing
+      real :: dep                   !              |
+      real :: strsw_av
+      real :: strsn_av
+      real :: strsp_av
+      real :: strss_av              !none (rtb salt)
+      real :: strstmp_av
+      real :: wet_outflow           !mm             |outflow from wetland
+      real  :: tile_fr_surf         !m3             |fraction of tile flow that is overland
+      integer :: ifrt
+      integer :: idp
+      real :: sw_volume_begin
+      real :: soil_prof_labp
+      real :: sum_conc,sum_mass,sum_sorb !rtb salt
+      real :: saltcon,qsurf,sedppm !Jeong 2024
+     
       
       j = ihru
       
@@ -216,7 +216,7 @@
         !rtb salt - calculate salt ion concentrations using salt equilibrium chemistry
         if (cs_db%num_salts > 0) then
           call salt_chem_hru
-        endif
+				endif
         
         !rtb cs - calculate change in constituent concentrations due to chemical reactions and sorption
         if (cs_db%num_cs > 0) then
@@ -302,7 +302,7 @@
         if (ires > 0) then
           call wetland_control
         else
-          ht2%flo = wet(j)%flo * hru(j)%area_ha * 10.
+          ht2%flo = ht2%flo + wet(j)%flo 
           wet(j)%flo = 0.
         end if
  
@@ -353,13 +353,13 @@
           call nut_nminrl
         end if
 
-      if (bsn_cc%cswat == 2) then
-        call cbn_zhang2
-      end if
+	    if (bsn_cc%cswat == 2) then
+	      call cbn_zhang2
+	    end if
 
         call nut_nitvol
 
-      if (bsn_cc%sol_P_model == 1) then  
+	    if (bsn_cc%sol_P_model == 1) then  
           call nut_pminrl2
         else
           call nut_pminrl
@@ -493,20 +493,20 @@
             call pest_enrsb
             if (sedyld(j) > 0.) call pest_pesty
 
-      if (bsn_cc%cswat == 0) then
-      call nut_orgn
-        end if
-        if (bsn_cc%cswat == 1) then      
-        call nut_orgnc
-      end if
-      
-      !! Add by zhang
-      !! ====================
-      if (bsn_cc%cswat == 2) then
-        call nut_orgnc2
-      end if
-      !! Add by zhang
-      !! ====================
+		  if (bsn_cc%cswat == 0) then
+			call nut_orgn
+	      end if
+	      if (bsn_cc%cswat == 1) then	    
+		    call nut_orgnc
+		  end if
+		  
+		  !! Add by zhang
+		  !! ====================
+		  if (bsn_cc%cswat == 2) then
+		    call nut_orgnc2
+		  end if
+		  !! Add by zhang
+		  !! ====================
 
             call nut_psed
           end if
@@ -517,6 +517,27 @@
 
         !! compute nitrate movement leaching
         call nut_nlch
+
+        if(wet(j)%flo>0.001) then
+          saltcon = wet(j)%salt/wet(j)%flo*1000 !mg/l
+        else
+          saltcon = 0
+        endif
+        
+        if (ires > 0) then
+          if (wet(j)%flo>0) then
+            sedppm=wet(j)%sed/wet(j)%flo*1000000.
+          else
+            sedppm=0.
+          end if
+
+          ! if (wet_dat_c(ires)%hyd.eq.'paddy' .and. j.eq.2899) then !.and.time%yrs > pco%nyskip) then  !spark, temp
+          if (wet_dat_c(ires)%hyd.eq.'paddy') then !.and.time%yrs > pco%nyskip) then
+           write(100100,'(4(I6,","),20(f20.3,","))') time%yrc,time%mo,time%day_mo,j,w%precip,irrig(j)%applied,hru(j)%water_seep,     &
+            pet_day,etday,wet_ob(j)%weir_hgt*1000,wet_ob(j)%depth*1000.,ht2%flo/(hru(j)%area_ha*10.),soil(j)%sw,sedppm,ht2%sed*1000, &
+            wet(j)%no3,ht2%no3,pcom(j)%lai_sum,saltcon, phubase(j), pcom(j)%plcur(1)%phuacc
+          end if
+        end if
 
         !! compute phosphorus movement
         call nut_solp
@@ -582,6 +603,7 @@
         !! ht2%flo is outflow from wetland or total saturation excess if no wetland
         if(ht2%flo > 0.) then
           wet_outflow = ht2%flo / hru(j)%area_ha / 10.   !! mm = m3/ha *ha/10000m2 *1000mm/m
+          qday = qday + wet_outflow
           qdr(j) = qdr(j) + wet_outflow
           ht2%flo = 0.
         end if
@@ -616,6 +638,7 @@
       if (ob(iob)%ru_tot > 0) then
         iob_out = sp_ob1%ru + ob(iob)%ru(1) - 1
       end if
+      qsurf=surfq(j)
       
       hwb_d(j)%surq_cha = 0.
       hwb_d(j)%latq_cha = 0.

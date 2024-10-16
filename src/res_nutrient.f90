@@ -9,15 +9,15 @@
       implicit none      
       
       integer, intent (in) :: iob
-      real :: nitrok = 0.        !              |
-      real :: phosk = 0.         !              |
-      real :: tpco = 0.          !              |
-      real :: chlaco = 0.        !              |
-      integer :: iwst = 0        !none          |weather station number
-      real :: nsetlr = 0.        !              |
-      real :: psetlr = 0.        !              |
-      real :: conc_n = 0.        !              |
-      real :: conc_p = 0.        !              |
+      real :: nitrok             !              |
+      real :: phosk              !              |
+      real :: tpco               !              |
+      real :: chlaco             !              |
+      integer :: iwst            !none          |weather station number
+      real :: nsetlr             !              |
+      real :: psetlr             !              |
+      real :: conc_n             !              |
+      real :: conc_p             !              |
       real :: theta              !              |
       
 
@@ -87,15 +87,16 @@
       ht2%chla = wbody%chla * ht2%flo / (wbody%flo + ht2%flo)
       ht2%nh3 = wbody%nh3 * ht2%flo / (wbody%flo + ht2%flo)
       ht2%no2 = wbody%no2 * ht2%flo / (wbody%flo + ht2%flo)
-      
+      ht2%salt = wbody%salt * ht2%flo / (wbody%flo + ht2%flo) !Jaehak 2023
+     
       !! remove nutrients leaving reservoir
-      wbody%no3 = wbody%no3 - ht2%no3
-      wbody%orgn = wbody%orgn - ht2%orgn
-      wbody%sedp = wbody%sedp - ht2%sedp
-      wbody%solp = wbody%solp - ht2%solp
-      wbody%chla = wbody%chla - ht2%chla
-      wbody%nh3 = wbody%nh3 - ht2%nh3
-      wbody%no2 = wbody%no2 - ht2%no2
+      wbody%no3 = max(0.,wbody%no3 - ht2%no3) !No less than zero, Jaehak 2024
+      wbody%orgn = max(0.,wbody%orgn - ht2%orgn)
+      wbody%sedp = max(0.,wbody%sedp - ht2%sedp)
+      wbody%solp = max(0.,wbody%solp - ht2%solp)
+      wbody%chla = max(0.,wbody%chla - ht2%chla)
+      wbody%nh3 = max(0.,wbody%nh3 - ht2%nh3)
+      wbody%no2 = max(0.,wbody%no2 - ht2%no2)
 
       return
       end subroutine res_nutrient

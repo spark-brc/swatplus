@@ -15,21 +15,22 @@
       
       implicit none
 
-      character (len=80) :: titldum = "" !           |title of file
-      character (len=80) :: header = ""  !           |header of file
-      integer :: eof = 0                 !           |end of file
-      integer :: imax = 0                !none       |determine max number for array (imax) and total number in file
+      character (len=80) :: titldum      !           |title of file
+      character (len=80) :: header       !           |header of file
+      integer :: eof                     !           |end of file
+      integer :: imax                    !none       |determine max number for array (imax) and total number in file
       logical :: i_exist                 !none       |check to determine if file exists
-      integer :: i = 0                   !none       |counter
-      integer :: ires = 0                !none       |counter 
-      integer :: ihyd = 0                !none       |counter 
-      integer :: k = 0                   !           |
-      integer :: irel = 0                !none       |counter
-      integer :: ised = 0                !none       |counter
-      integer :: inut = 0                !none       |counter
-      integer :: isp_ini = 0             !none       |counter
-      integer :: ics = 0                 !none       |counter
-      integer :: isstor = 0              !none       |counter
+      integer :: i                       !none       |counter
+      integer :: j                       !none       |counter
+      integer :: ires                    !none       |counter 
+      integer :: ihyd                    !none       |counter 
+      integer :: k                       !           |
+      integer :: irel                    !none       |counter
+      integer :: ised                    !none       |counter
+      integer :: inut                    !none       |counter
+      integer :: isp_ini                 !none       |counter
+      integer :: ics                     !none       |counter
+      integer :: isstor                  !none       |counter
       
       eof = 0
       imax = 0
@@ -120,7 +121,15 @@
                   end if
                 end do
        
-                !! xwalk release decision table
+			            !if (wet_dat_c(isstor)%name == hru(i)%dbsc%surf_stor) then  !jaehak 2023
+			  		        !do j = 1, db_mx%res_weir
+			  		        !  if (wet_dat_c(isstor)%weir == res_weir(j)%name) then
+			  			       !   wet_ob(i)%iweir = j
+			  		        !  end if
+			  		        !end do
+               !   end if
+               !
+                  !! xwalk release decision table
                 do irel = 1, db_mx%dtbl_res
                   if (dtbl_res(irel)%name == wet_dat_c(isstor)%release) then
                     wet_dat(isstor)%release = irel
@@ -132,6 +141,8 @@
                do ised = 1, db_mx%res_sed
                  if (res_sed(ised)%name == wet_dat_c(isstor)%sed) then
                    wet_prm(i)%sed = res_sed(ised)
+                   !! d50 -micro meters
+                   wet_prm(i)%sed_stlr_co = exp(-0.184 * wet_prm(i)%sed%d50)
                    wet_dat(isstor)%sed = ised
                    exit
                  end if

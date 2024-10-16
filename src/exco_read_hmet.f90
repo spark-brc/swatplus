@@ -9,18 +9,10 @@
 
       implicit none
  
-      character (len=80) :: titldum = ""
-      character (len=80) :: header = ""
-      integer :: eof = 0
-      integer :: imax = 0
-      integer :: ob1 = 0
-      integer :: ob2 = 0
+      character (len=80) :: titldum, header
+      integer :: eof, imax, ob1, ob2
       logical :: i_exist              !none       |check to determine if file exists
-      integer :: iexco_hmet = 0
-      integer :: ii = 0
-      integer :: ihmet = 0
-      integer :: iexco = 0
-      integer :: iob = 0
+      integer :: iexco_hmet, ii, ihmet, iexco, iob
 
       eof = 0
       imax = 0
@@ -45,9 +37,9 @@
           
           allocate (exco_hmet(imax))
           do iexco_hmet = 1, imax
-            allocate (exco_hmet(iexco_hmet)%hmet(cs_db%num_metals), source = 0.)
+            allocate (exco_hmet(iexco_hmet)%hmet(cs_db%num_metals))
           end do
-          allocate (exco_hmet_num(imax), source = 0)
+          allocate (exco_hmet_num(imax))
           allocate (exco_hmet_name(imax))
           rewind (107)
           read (107,*,iostat=eof) titldum
@@ -85,10 +77,10 @@
         iexco = ob(iob)%props
         if (exco_db(iexco)%hmet_file == "null") then
           obcs(iob)%hd(1)%hmet = 0.
-        else
+		else
           iexco_hmet = exco_hmet_num(iexco)
           obcs(iob)%hd(1)%hmet = exco_hmet(iexco_hmet)%hmet
-        end if
+		end if
       end do
       
       return

@@ -21,37 +21,36 @@
       
       implicit none
       
-      integer :: icom = 0          !         |  
-      integer :: idp = 0           !         |
-      integer :: j = 0             !none     |counter
-      integer :: iharvop = 0       !         |harvest operation type 
-      integer :: idtill = 0        !none     |tillage type
-      integer :: ifrt = 0          !         |fertilizer type from fert data base
-      integer :: iob = 0           !         | 
-      integer :: ipestcom = 0      !none     |counter
-      integer :: ipest = 0         !none     |sequential pesticide type from pest community
-      integer :: ipestop = 0       !none     |surface application fraction from chem app data base 
-      integer :: irrop = 0         !none     |irrigation ops data base pointer
-      integer :: jj = 0            !none     |counter
+      integer :: icom              !         |  
+      integer :: idp               !         |
+      integer :: j,i                 !none     |counter
+      integer :: iharvop           !         |harvest operation type 
+      integer :: idtill            !none     |tillage type
+      integer :: ifrt              !         |fertilizer type from fert data base
+      integer :: iob               !         | 
+      integer :: ipestcom          !none     |counter
+      integer :: ipest             !none     |sequential pesticide type from pest community
+      integer :: ipestop           !none     |surface application fraction from chem app data base 
+      integer :: irrop             !none     |irrigation ops data base pointer
+      integer :: jj                !none     |counter
       integer :: isched            !         | 
-      integer :: iburn = 0         !none     |burn type from fire data base
-      integer :: ifertop = 0       !frac     |surface application fraction from chem app data base
-      integer :: iplt_bsn = 0
-      integer :: ireg = 0
-      integer :: ilum = 0
-      real :: fr_curb = 0.         !none     |availability factor, the fraction of the 
+      integer :: iburn             !none     |burn type from fire data base
+      integer :: ifertop           !frac     |surface application fraction from chem app data base
+      integer :: iplt_bsn
+      integer :: ireg
+      integer :: ilum
+      real :: fr_curb              !none     |availability factor, the fraction of the 
       integer :: ires = 0
-      integer :: ipud = 0          !none     |counter Jaehak 2022
-      integer :: ipdl = 0          !none     |counter Jaehak 2022
+      integer :: ipud, ipdl        !none     |counter Jaehak 2022
                                    !         |curb length that is sweepable
-      real :: biomass = 0.         !         |
-      real :: frt_kg = 0.          !kg/ha    |amount of fertilizer applied
-      real :: pest_kg = 0.         !kg/ha    |amount of pesticide applied 
+      real :: biomass              !         |
+      real :: frt_kg               !kg/ha    |amount of fertilizer applied
+      real :: pest_kg              !kg/ha    |amount of pesticide applied 
       real :: chg_par              !variable |new parameter value
-      real :: wsa1 = 0.
-      real :: harveff = 0.
-      integer :: idb = 0           !none     |counter
-      integer :: itr = 0
+      real :: wsa1
+      real :: harveff
+      integer :: idb               !none     |counter
+      integer :: itr
 
       j = ihru
       ires= hru(j)%dbs%surf_stor ! for paddy management Jaehak 2022
@@ -436,19 +435,33 @@
 
             !! set weir height and adjust principal spillway storage and depth
             wet_ob(j)%weir_hgt = mgt%op3 / 1000. !weir height, m
-            wet_ob(j)%pvol = hru(j)%area_ha * wet_ob(j)%weir_hgt * 10.
+            wet_ob(j)%pvol = hru(j)%area_ha * wet_ob(j)%weir_hgt * 10000. !m3
             if (wet_ob(j)%evol < wet_ob(j)%pvol*1.1) then
               wet_ob(j)%evol = wet_ob(j)%pvol * 1.1   
             endif
+            
+            !assign weir
+			  		do i = 1, db_mx%res_weir
+			  		  if (mgt%op_char == res_weir(i)%name) then
+			  			  wet_ob(j)%iweir = i
+			  		  end if
+			  		end do
+            
               
           case ("irrp")  !! continuous irrigation to maintain surface ponding in rice fields Jaehak 2022
-            hru(j)%irr_src = mgt%op_plant                   !irrigation source: cha; res; aqu; or unlim													
-            hru(j)%irr_hmin = irrop_db(mgt%op1)%dep_mm     !threshold ponding depth, mm
+            hru(j)%irr_src = mgt%op_plant                   !irrigation source: cha; res; aqu; or unlim
+            hru(j)%irr_isc = mgt%op3                        !irrigation source object ID: cha; res; aqu; or unlim
+            hru(j)%irr_hmax = irrop_db(mgt%op1)%amt_mm     !irrigation amount in irr.org, mm
+            hru(j)%irr_hmin = hru(j)%irr_hmax * 0.9        !threshold ponding depth, mm
             irrig(j)%eff = irrop_db(mgt%op1)%eff
             irrig(j)%frac_surq = irrop_db(mgt%op1)%surq
+            irrig(j)%salt = irrop_db(mgt%op1)%salt  !ppm salt  Jaehak 2023
+            irrig(j)%no3 = irrop_db(mgt%op1)%no3 !ppm  no3
             pcom(j)%days_irr = 1            ! reset days since last irrigation
             if (mgt%op3 < 0) then
               hru(j)%irr_hmax = irrop_db(mgt%op1)%amt_mm     !irrigation amount in irr.org, mm
+
+              if (hru(j)%irr_hmax>0) hru(j)%paddy_irr = 1 !paddy irrigation is on with manual scheduling
             else
               hru(j)%irr_hmax = mgt%op3       !target ponding depth, mm
               if (mgt%op3 > 0) then

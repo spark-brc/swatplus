@@ -7,16 +7,16 @@
       use fertilizer_data_module
       use pesticide_data_module
       use time_module
-      
+      use reservoir_data_module      
       implicit none      
       
-      integer :: iyear = 0   !            |
-      integer :: day = 0     !            |
-      integer :: mon = 0     !            |
-      integer :: iop = 0     !none        |
+      integer :: iyear       !            |
+      integer :: day         !            |
+      integer :: mon         !            |
+      integer :: iop         !none        |
       integer :: isched      !            |
       integer :: jdt         !none        |julian date
-      integer :: idb = 0     !none        | 
+      integer :: idb         !none        | 
 
       iyear = 1
       do iop = 1, sched(isched)%num_ops                             !! operation loop
@@ -150,8 +150,16 @@
                   sched(isched)%mgt_ops(iop)%op1 = idb
                   exit
               endif
+            end do  
+            
+          case ("weir") !Jaehak 2024
+            do idb = 1, db_mx%res_weir
+              if (sched(isched)%mgt_ops(iop)%op_char == res_weir(idb)%name) then
+                sched(isched)%mgt_ops(iop)%op1 = idb
+                exit
+              end if
+            end do
 !!herehere no null
-            end do      
        end select          
       end do                                  !! operation loop
     

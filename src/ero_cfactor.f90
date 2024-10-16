@@ -34,20 +34,21 @@
       
       implicit none
 
-      integer :: j = 0      !none          |HRU number
-      integer :: ipl = 0    !none          |sequential plant number
-      integer :: idp = 0    !none          |plant number in data file - pldb
-      real :: c = 0.        !              |
-      real :: ab_gr_t = 0.  !tons          |above ground biomass of each plant
-      real :: rsd_pctcov = 0. !              |percent of cover by residue
-      real :: rsd_covfact = 0.!              |residue cover factor
-      real :: can_covfact = 0.!              |canopy cover factor
-      real :: can_frcov = 0.  !              |fraction of canopy cover
-      real :: rsd_sumfac = 0. !              |sum of residue cover factor by plant
-      real :: grnd_sumfac = 0.!              |ground cover factor for each plant
-      real :: grnd_covfact = 0.!              |sum of plant ground cover factor by plant
-      real :: cover = 0.    !kg/ha         |soil cover - sum of residue and biomass
+      integer :: j          !none          |HRU number
+      integer :: ipl        !none          |sequential plant number
+      integer :: idp        !none          |plant number in data file - pldb
+      real :: c             !              |
+      real :: ab_gr_t       !tons          |above ground biomass of each plant
+      real :: rsd_pctcov    !              |percent of cover by residue
+      real :: rsd_covfact   !              |residue cover factor
+      real :: can_covfact   !              |canopy cover factor
+      real :: can_frcov     !              |fraction of canopy cover
+      real :: rsd_sumfac    !              |sum of residue cover factor by plant
+      real :: grnd_sumfac   !              |ground cover factor for each plant
+      real :: grnd_covfact  !              |sum of plant ground cover factor by plant
+      real :: cover         !kg/ha         |soil cover - sum of residue and biomass
       j = ihru
+      idp=0
 
       bsn_cc%cfac = 1   !***jga
       !! HRU sediment calculations
@@ -62,13 +63,13 @@
           else
             c = .8
           end if
-        end if
+	    end if
       else
         !! new method using residue and biomass cover
         rsd_sumfac = 0.
         grnd_sumfac = 0.
         do ipl = 1, pcom(j)%npl
-          idp = pcom(j)%plcur(ipl)%idplt
+          idp = pcom(j)%plcur(ipl)%idplt    
           rsd_sumfac = rsd_sumfac + pldb(idp)%rsd_pctcov * (rsd1(j)%tot(ipl)%m +1.) / 1000.
           if (pl_mass(j)%ab_gr(ipl)%m > 1.e-6) then
             ab_gr_t = pl_mass(j)%ab_gr(ipl)%m / 1000.

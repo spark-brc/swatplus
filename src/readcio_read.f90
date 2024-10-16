@@ -4,11 +4,11 @@
 
        implicit none
            
-       character (len=80) :: titldum = ""
-       character (len=15) :: name = ""
-       integer :: eof = 0
+       character (len=80) :: titldum
+       character (len=15) :: name
+       integer :: eof
        logical :: i_exist              !none       |check to determine if file exists
-       integer :: i = 0
+       integer :: i
        
        eof = 0
        

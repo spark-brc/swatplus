@@ -34,7 +34,7 @@
       use hydrograph_module
       use pesticide_data_module
       use plant_module
-	    use gwflow_module
+	  use gwflow_module
       
       implicit none
 
@@ -46,16 +46,16 @@
       integer, intent (in) :: ielem                         !                | 
       integer, intent (in) :: num_db                        !                | 
       integer, intent (in) :: ly                            !                |
-      integer :: jj = 0                                     !                |soil layer counter
-      integer :: ipl = 0                                    !                |soil layer counter
-      integer :: ihru = 0                                   !                |hru counter
-      integer :: icell                                      !                |gwflow cell counter (rtb)
+      integer :: jj                                         !                |soil layer counter
+      integer :: ipl                                        !                |soil layer counter
+      integer :: ihru                                       !                |hru counter
+	  integer :: icell                                      !                |gwflow cell counter (rtb)
       real :: exp                                           !                | 
-      real :: c_val = 0.                                    !                | 
-      real :: abmax = 0.                                    !                | 
+      real :: c_val                                         !                | 
+      real :: abmax                                         !                | 
       real :: chg_par                                       !variable        |new parameter value
-      real :: perc_ln_func = 0.                             !none       |function to convert perco to perc_lim
-      real :: rock = 0.                                     !                | 
+      real :: perc_ln_func                                  !none       |function to convert perco to perc_lim
+      real :: rock                                          !                | 
 
       select case (chg_parm)
 
@@ -740,6 +740,12 @@
          case ("nsed")
            res_prm(ielem)%sed%nsed = chg_par(res_prm(ielem)%sed%nsed,           &
                          chg_typ, chg_val, absmin, absmax)
+           
+         case ("res_d50")
+           res_prm(ielem)%sed%d50 = chg_par(res_prm(ielem)%sed%d50,           &
+                         chg_typ, chg_val, absmin, absmax)
+           !! d50 -micro meters
+           res_prm(ielem)%sed_stlr_co = exp(-0.184 * res_prm(ielem)%sed%d50)
            
          case ("sed_stlr")
            res_prm(ielem)%sed%sed_stlr = chg_par(res_prm(ielem)%sed%sed_stlr,           &

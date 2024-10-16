@@ -6,12 +6,11 @@
       
       implicit none
  
-      character (len=80) :: titldum = ""
-      character (len=80) :: header = ""
-      integer :: isalt = 0
-      integer :: isalti = 0
-      integer :: eof = 0
-      integer :: imax = 0
+      character (len=80) :: titldum
+      character (len=80) :: header
+      integer :: isalt
+      integer :: isalti
+      integer :: eof, imax
       logical :: i_exist              !none       |check to determine if file exists
 
       eof = 0
@@ -38,7 +37,7 @@
           !allocate salt irrigation array
           allocate (salt_water_irr(imax))
           do isalti=1,imax
-            allocate (salt_water_irr(isalti)%water(cs_db%num_salts), source = 0.)
+            allocate(salt_water_irr(isalti)%water(cs_db%num_salts))
           end do
            
           !read in values
